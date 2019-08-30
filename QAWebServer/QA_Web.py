@@ -58,6 +58,7 @@ from tornado_http2.server import Server
 from QUANTAXIS.QAUtil.QASetting import QASETTING
 from QUANTAXIS import __version__
 from terminado import TermSocket, SingleTermManager
+from QAWebServer.predicthandler import PredictHandler
 
 
 class INDEX(QABaseHandler):
@@ -132,7 +133,9 @@ handlers = [
     (r"/command/filemapper",
      FileRunHandler),
     (r"/file",
-    FileHandler)
+    FileHandler),
+    (r"/predict",
+     PredictHandler)
 ]
 
 
