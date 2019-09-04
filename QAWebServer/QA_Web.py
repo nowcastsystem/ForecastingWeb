@@ -135,7 +135,9 @@ handlers = [
     (r"/file",
     FileHandler),
     (r"/predict",
-     PredictHandler)
+     PredictHandler),
+    (r"/auth",
+     AuthHandler)
 ]
 
 
