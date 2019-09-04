@@ -59,6 +59,7 @@ from QUANTAXIS.QAUtil.QASetting import QASETTING
 from QUANTAXIS import __version__
 from terminado import TermSocket, SingleTermManager
 from QAWebServer.predicthandler import PredictHandler
+from QAWebServer.authhandler import AuthHandler
 
 
 class INDEX(QABaseHandler):
