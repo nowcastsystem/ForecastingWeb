@@ -3,6 +3,7 @@ from QAWebServer.basehandles import QABaseHandler
 from QUANTAXIS.QAUtil import QASETTING
 import pandas as pd
 from QUANTAXIS.QAUtil.QATransform import QA_util_to_json_from_pandas
+
 class PredictHandler(QABaseHandler):
     def get(self,):
         start = self.get_argument('start')
