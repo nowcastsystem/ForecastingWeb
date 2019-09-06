@@ -19,5 +19,4 @@ class PredictHandler(QABaseHandler):
         outcome = pd.DataFrame(list(col))
         outcome = outcome.drop(columns='_id')
         data = QA_util_to_json_from_pandas(outcome)
-        self.write({'result':data})
-        
+        self.write({'result': data})
