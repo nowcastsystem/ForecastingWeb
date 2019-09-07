@@ -64,24 +64,44 @@ class SignupHandler(QABaseHandler):
 class SigninHandler(QABaseHandler):
 
     def get(self):
-        """登陆接口
+        # ret_json = {}
+        # with open('./rsa_keys/rsa_1024_pub.pem') as pub:
+        #     ret_json['public_key'] = pub.read()
+        ret_json = {'public_key': '-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDLeYSDuG0HTxdLmNXjdOWDQm94\nkEWNGR4jMAeN3mejoguR6YY033/XD0zUjk+6h8wc87auUn7E4MbWnnxB+mdlB6S8\nXGDfcwBh/omTNUWDXWUGttJUbOoWYPsVurHSaTgEmYjD2m2X76qsJbu8MTgU00zR\nvONCSmMn6aS0j7aXzQIDAQAB\n-----END PUBLIC KEY-----'}
+        return ret_json
 
+    def post(self):
+        """登陆接口
         Arguments:
             QABaseHandler {[type]} -- [description]
-
             user/signup?user=xxx&password=xx
-        Return 
+        Return
             'SUCCESS' if success
             'WRONG' if wrong
         """
 
-        username = self.get_argument('user', default='admin')
+        username = self.get_argument('account', default='admin')
         password = self.get_argument('password', default='admin')
-        res = QA_user_sign_in(username, password)
-        if res is not None:
-            self.write('SUCCESS')
-        else:
-            self.write('WRONG')
+        # res = QA_user_sign_in(username, password)
+        # if res is not None:
+        #     self.write('SUCCESS')
+        # else:
+        #     self.write('WRONG')
+        self.write({
+                'login_status': 'success',
+                'username': username,
+                'picture': 'assets/images/admin.png',
+                'messages': [
+                    'Login succeed, redirecting...',
+                ],
+                'redirect': '/pages/emile',
+                'data': {
+                    'token': {
+                        'loggedIn': True,
+                    },
+                }
+        })
+
 
 
 class UserHandler(QABaseHandler):
