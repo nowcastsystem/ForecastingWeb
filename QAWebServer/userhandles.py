@@ -24,7 +24,7 @@
 
 import datetime
 import json
-
+import requests
 import tornado
 from tornado.web import Application, RequestHandler, authenticated
 from tornado.websocket import WebSocketHandler
@@ -35,6 +35,11 @@ from QUANTAXIS.QAUtil.QASetting import DATABASE
 from QUANTAXIS.QAUtil import QA_util_to_json_from_pandas
 from QUANTAXIS.QAUtil.QASql import QA_util_sql_mongo_setting
 from QAWebServer.basehandles import QABaseHandler
+from Crypto.Hash import SHA
+from Crypto.Cipher import PKCS1_v1_5
+from Crypto.PublicKey import RSA
+import base64
+import pymongo
 
 
 class SignupHandler(QABaseHandler):
@@ -63,14 +68,14 @@ class SignupHandler(QABaseHandler):
 
 class SigninHandler(QABaseHandler):
 
-    def get(self):
+    # def get(self):
         # ret_json = {}
         # with open('./rsa_keys/rsa_1024_pub.pem') as pub:
         #     ret_json['public_key'] = pub.read()
-        ret_json = {'public_key': '-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDLeYSDuG0HTxdLmNXjdOWDQm94\nkEWNGR4jMAeN3mejoguR6YY033/XD0zUjk+6h8wc87auUn7E4MbWnnxB+mdlB6S8\nXGDfcwBh/omTNUWDXWUGttJUbOoWYPsVurHSaTgEmYjD2m2X76qsJbu8MTgU00zR\nvONCSmMn6aS0j7aXzQIDAQAB\n-----END PUBLIC KEY-----'}
-        return ret_json
+        # ret_json = {'public_key': '-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDLeYSDuG0HTxdLmNXjdOWDQm94\nkEWNGR4jMAeN3mejoguR6YY033/XD0zUjk+6h8wc87auUn7E4MbWnnxB+mdlB6S8\nXGDfcwBh/omTNUWDXWUGttJUbOoWYPsVurHSaTgEmYjD2m2X76qsJbu8MTgU00zR\nvONCSmMn6aS0j7aXzQIDAQAB\n-----END PUBLIC KEY-----'}
+        # return ret_json
 
-    def post(self):
+    def get(self):
         """登陆接口
         Arguments:
             QABaseHandler {[type]} -- [description]
@@ -79,30 +84,102 @@ class SigninHandler(QABaseHandler):
             'SUCCESS' if success
             'WRONG' if wrong
         """
-
-        username = self.get_argument('account', default='admin')
+        sha = SHA.new()
+        account = self.get_argument('account', default='admin')
         password = self.get_argument('password', default='admin')
+        print(password)
+        # decrypted_password = decrypt_password(password)
+        sha.update(password.encode('UTF-8'))
+        sha_encrypted_password = sha.hexdigest()
+
+        # TODO: Check database and validate the username and password
+        api_url = 'http://127.0.0.1:27017/'
+        response = requests.get(url=api_url)
+        if response.status_code == 200:
+            print('connect success')
+            client = pymongo.MongoClient('mongodb://127.0.0.1:27017/')
+            database = client.mydatabase
+            collection = database['userinfo']
+            res = collection.find_one(
+                {
+                    'adminName': account,
+                    'password': sha_encrypted_password
+                }
+            )
+            if res is None:
+
+                if collection.find_one({'adminName': account}) is None:
+                    print('invalid account name')
+                    self.write({
+                        'login_status': 'fail',
+                        'errors': [
+                            'invalid account name',
+                        ]
+                    })
+                else:
+                    print('invalid password')
+                    self.write({
+                        'login_status': 'fail',
+                        'errors': [
+                            'invalid password',
+                        ]
+                    })
+            # admins = response.json()
+            # if admins['admin']['adminName'] == account and admins['admin']['password'] == sha_encrypted_password:
+            else:
+                self.write({
+                    'login_status': 'success',
+                    'username': account,
+                    'picture': 'assets/images/admin.png',
+                    'messages': [
+                        'Login succeed, redirecting...',
+                    ],
+                    'redirect': '/pages/emile',
+                    'data': {
+                        'token': {
+                            'loggedIn': True,
+                        },
+                    }
+                })
+
+        self.write({
+            'login_status': 'fail',
+            'errors': [
+                'cannot connect to database',
+            ]
+        })
+
         # res = QA_user_sign_in(username, password)
         # if res is not None:
         #     self.write('SUCCESS')
         # else:
         #     self.write('WRONG')
-        self.write({
-                'login_status': 'success',
-                'username': username,
-                'picture': 'assets/images/admin.png',
-                'messages': [
-                    'Login succeed, redirecting...',
-                ],
-                'redirect': '/pages/emile',
-                'data': {
-                    'token': {
-                        'loggedIn': True,
-                    },
-                }
-        })
 
 
+def decrypt_password(password):
+    """
+        Decrypt the password which encrypted by public key
+
+        Parameters:
+            password (str): encrypted password (using public key)
+
+        Returns:
+            decrypted password or sentinel(default value: -1)
+    """
+    data = base64.b64decode(password+ "==")
+    # load private key
+    with open ('./rsa_keys/rsa_1024_priv.pem') as pri:
+        private_key = RSA.import_key(pri.read())
+
+    # private_key = RSA.import_key(open('./rsa_keys/rsa_1024_priv.pem').read())
+
+    # create cipher rsa using PKCS_v1_5
+    cipher_rsa = PKCS1_v1_5.new(private_key)
+
+    # if decrypt failed, sentinel will be returned
+    sentinel = -1
+    ret = cipher_rsa.decrypt(data, sentinel)
+    return ret
 
 class UserHandler(QABaseHandler):
     """这个handler是QAUser的部分实现
