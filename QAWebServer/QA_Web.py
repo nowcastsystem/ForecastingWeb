@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2016-2018 yutiansut/QUANTAXIS
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
+# Permission is hereby granted, free of charge, to any person obtaining a.csv copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -61,6 +61,7 @@ from QUANTAXIS import __version__
 from terminado import TermSocket, SingleTermManager
 from QAWebServer.predicthandler import PredictHandler
 from QAWebServer.uploaderhandler import UploaderHandler
+from QAWebServer.testhandler import TestHandler
 
 class INDEX(QABaseHandler):
 
@@ -68,7 +69,7 @@ class INDEX(QABaseHandler):
         self.write(
             {
                 'status': 200,
-                'message': 'This is a welcome page for quantaxis backend',
+                'message': 'This is a.csv welcome page for quantaxis backend',
                 'github_page':
                 'https://github.com/yutiansut/QUANTAXIS_WEBSERVER/blob/master/backendapi.md',
                 'url': [item[0] for item in handlers]
@@ -138,7 +139,9 @@ handlers = [
     (r"/predict",
      PredictHandler),
     (r"/uploader",
-     UploaderHandler)
+     UploaderHandler),
+    (r"/testpredcit",
+    TestHandler)
 ]
 
 

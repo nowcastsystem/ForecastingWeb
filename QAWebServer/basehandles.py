@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2016-2018 yutiansut/QUANTAXIS
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
+# Permission is hereby granted, free of charge, to any person obtaining a.csv copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -165,35 +165,35 @@ def config(func, method, **kwparams):
 
 
 def get(*params, **kwparams):
-    """ Decorator for config a python function like a Rest GET verb	"""
+    """ Decorator for config a.csv python function like a.csv Rest GET verb	"""
     def method(f):
         return config(f, 'GET', **kwparams)
     return method
 
 
 def post(*params, **kwparams):
-    """ Decorator for config a python function like a Rest POST verb """
+    """ Decorator for config a.csv python function like a.csv Rest POST verb """
     def method(f):
         return config(f, 'POST', **kwparams)
     return method
 
 
 def put(*params, **kwparams):
-    """ Decorator for config a python function like a Rest PUT verb	"""
+    """ Decorator for config a.csv python function like a.csv Rest PUT verb	"""
     def method(f):
         return config(f, 'PUT', **kwparams)
     return method
 
 
 def patch(*params, **kwparams):
-    """ Decorator for config a python function like a Rest PATCH verb """
+    """ Decorator for config a.csv python function like a.csv Rest PATCH verb """
     def method(f):
         return config(f, 'PATCH', **kwparams)
     return method
 
 
 def delete(*params, **kwparams):
-    """ Decorator for config a python function like a Rest PUT verb	"""
+    """ Decorator for config a.csv python function like a.csv Rest PUT verb	"""
     def method(f):
         return config(f, 'DELETE', **kwparams)
     return method
@@ -389,7 +389,7 @@ class QARestHandler(RequestHandler):
 
     @classmethod
     def get_handlers(self):
-        """ Gets a list with (path, handler) """
+        """ Gets a.csv list with (path, handler) """
         svs = []
         paths = self.get_paths()
         for p in paths:

@@ -5,7 +5,15 @@ from QAWebServer.basehandles import QABaseHandler
 from QUANTAXIS.QASetting.QALocalize import cache_path
 from QUANTAXIS.QAUtil.QAParameter import RUNNING_STATUS
 from QUANTAXIS.QAUtil.QASetting import DATABASE
+import io
+import pandas as pd
+from QUANTAXIS.QAUtil import QASETTING
+import json
+from QUANTAXIS.TSData.TSRawdata import TSRawdata
+from QUANTAXIS.TSUtil.TSDate import TS_util_date2str
 
+
+import base64
 
 class UploaderHandler(QABaseHandler):
     def set_default_headers(self):
@@ -15,7 +23,7 @@ class UploaderHandler(QABaseHandler):
         self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
 
     def post(self):
-        path = 'a'
+        path = 'a.csv'
         with open(path, 'wb') as out:
             body = self.request.body
             print(body)
@@ -26,9 +34,26 @@ class UploaderHandler(QABaseHandler):
         path = 'a'
         with open(path, 'wb') as out:
             body = self.request.body
-            print(body)
             out.write(bytes(body))
+            df = pd.read_csv(io.StringIO(body.decode('utf-8')))
+            rawdata = TSRawdata(df)
+            outcome = rawdata.data
+            outcome = TS_util_date2str(outcome)
+            outcome = json.loads(outcome.to_json(orient='records'))
+            # print(df)
+            myclient = QASETTING.client
+            database = myclient.mydatabase
+            col = database.uploaddata
+            col.insert_many(outcome)
+            # out.write(bytes(body))
+            # print(pd.read_csv(bytes(body)))
+            # decoded = base64.b64decode(body)
+            # df = pd.read_csv(
+            #     io.StringIO(decoded.decode('utf-8')))
+            # print(df)
         self.write('WRONG')
+
+
 
     def options(self, *args, **kwargs):
         self.set_status(204)
