@@ -6,14 +6,30 @@ from QUANTAXIS.QASetting.QALocalize import cache_path
 from QUANTAXIS.QAUtil.QAParameter import RUNNING_STATUS
 from QUANTAXIS.QAUtil.QASetting import DATABASE
 
-class UploaderHandler(QABaseHandler):
-    def post(self):
-        fileinfo = self.request.files['filearg'][0]
 
-        # f= open("guru999.txt", "w+")
-        # for i in range(10):
-        #     f.write("This is line %d\r\n" % (i + 1))
-        # f.close()
-        file = self.request.files['file'][0]
-        #file.save('kos.csv')
+class UploaderHandler(QABaseHandler):
+    def set_default_headers(self):
+        print("setting headers!!!")
+        self.set_header("Access-Control-Allow-Origin","*")
+        self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With")
+        self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
+
+    def post(self):
+        path = 'a'
+        with open(path, 'wb') as out:
+            body = self.request.body
+            print(body)
+            out.write(bytes(body))
         self.write('WRONG')
+
+    def put(self):
+        path = 'a'
+        with open(path, 'wb') as out:
+            body = self.request.body
+            print(body)
+            out.write(bytes(body))
+        self.write('WRONG')
+
+    def options(self, *args, **kwargs):
+        self.set_status(204)
+        self.finish()
