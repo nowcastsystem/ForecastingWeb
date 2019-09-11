@@ -61,6 +61,7 @@ from QUANTAXIS import __version__
 from terminado import TermSocket, SingleTermManager
 from QAWebServer.predicthandler import PredictHandler
 from QAWebServer.uploaderhandler import UploaderHandler
+from QAWebServer.testhandler import TestHandler
 
 class INDEX(QABaseHandler):
 
@@ -138,7 +139,9 @@ handlers = [
     (r"/predict",
      PredictHandler),
     (r"/uploader",
-     UploaderHandler)
+     UploaderHandler),
+    (r"/testpredict",
+     TestHandler)
 ]
 
 
