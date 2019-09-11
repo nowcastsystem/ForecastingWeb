@@ -140,7 +140,7 @@ handlers = [
      PredictHandler),
     (r"/uploader",
      UploaderHandler),
-    (r"/testpredcit",
+    (r"/testpredict",
     TestHandler)
 ]
 
