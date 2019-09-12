@@ -17,7 +17,7 @@ class UploaderHandler(QABaseHandler):
     def set_default_headers(self):
         print("setting headers!!!")
         self.set_header("Access-Control-Allow-Origin","*")
-        self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With")
+        self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With,  x-csrf-token")
         self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
 
     def post(self):
@@ -39,7 +39,7 @@ class UploaderHandler(QABaseHandler):
         #     io.StringIO(decoded.decode('utf-8')))
         # print(df)
 
-        self.write('token =123')
+        self.write('123')
 
 
     def put(self):
@@ -61,7 +61,8 @@ class UploaderHandler(QABaseHandler):
         #     io.StringIO(decoded.decode('utf-8')))
         # print(df)
 
-        self.write('token =123')
+
+        self.write('123')
 
     def options(self, *args, **kwargs):
         self.set_status(204)
