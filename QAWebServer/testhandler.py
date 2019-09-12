@@ -12,16 +12,16 @@ class TestHandler(QABaseHandler):
         self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With, x-token")
         self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
     def get(self):
-        # client = QASETTING.client
-        # database = client.mydatabase
-        # collection = database.uploaddata
-        # ref = collection.find()
-        # start = ref[0]['datetime']
-        # end = ref[ref.count()-1]['datetime']
-        # by = 'D'
-        # databaseid = 'mydatabase'
-        # collectionid = 'uploaddata'
-        # TS_Boosting_predict(start=start, end=end, by=by, databaseid=databaseid, collectionid=collectionid)
+        client = QASETTING.client
+        database = client.mydatabase
+        collection = database.uploaddata
+        ref = collection.find()
+        start = ref[0]['datetime']
+        end = ref[ref.count()-1]['datetime']
+        by = 'D'
+        databaseid = 'mydatabase'
+        collectionid = 'uploaddata'
+        TS_Boosting_predict(start=start, end=end, by=by, databaseid=databaseid, collectionid=collectionid)
         test = {'token': 'success'}
         self.write(json.dumps(test))
 
