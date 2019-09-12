@@ -31,6 +31,7 @@ class UploaderHandler(QABaseHandler):
         myclient = QASETTING.client
         database = myclient.mydatabase
         col = database.uploaddata
+        col.drop()
         col.insert_many(outcome)
         # out.write(bytes(body))
         # print(pd.read_csv(bytes(body)))
@@ -53,6 +54,7 @@ class UploaderHandler(QABaseHandler):
         myclient = QASETTING.client
         database = myclient.mydatabase
         col = database.uploaddata
+        col.drop()
         col.insert_many(outcome)
         # out.write(bytes(body))
         # print(pd.read_csv(bytes(body)))
