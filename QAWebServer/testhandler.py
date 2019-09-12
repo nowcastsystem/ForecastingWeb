@@ -3,6 +3,7 @@ from QAWebServer.basehandles import QABaseHandler
 from QUANTAXIS.QAUtil import QASETTING
 import pandas as pd
 from QUANTAXIS.QAUtil.QATransform import QA_util_to_json_from_pandas
+import json
 
 class TestHandler(QABaseHandler):
     def set_default_headers(self):
@@ -21,7 +22,8 @@ class TestHandler(QABaseHandler):
         # databaseid = 'mydatabase'
         # collectionid = 'uploaddata'
         # TS_Boosting_predict(start=start, end=end, by=by, databaseid=databaseid, collectionid=collectionid)
-        self.write("testsuccess")
+        test = {'token': 'success'}
+        self.write(json.dumps(test))
 
     def options(self, *args, **kwargs):
         self.set_status(204)
