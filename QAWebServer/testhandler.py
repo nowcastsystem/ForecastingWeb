@@ -4,10 +4,11 @@ from QUANTAXIS.QAUtil import QASETTING
 import pandas as pd
 from QUANTAXIS.QAUtil.QATransform import QA_util_to_json_from_pandas
 import json
+import time
 
 class TestHandler(QABaseHandler):
     def set_default_headers(self):
-        print("setting headers!!!")
+        print("setting headers!!! analyze")
         self.set_header("Access-Control-Allow-Origin","*")
         self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With, x-token")
         self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
@@ -21,7 +22,9 @@ class TestHandler(QABaseHandler):
         by = 'D'
         databaseid = 'mydatabase'
         collectionid = 'uploaddata'
-        TS_Boosting_predict(start=start, end=end, by=by, databaseid=databaseid, collectionid=collectionid)
+        time.sleep(3)
+        #TS_Boosting_predict(start=start, end=end, by=by, databaseid=databaseid, collectionid=collectionid)
+        print("token")
         test = {'token': 'success'}
         self.write(json.dumps(test))
 
