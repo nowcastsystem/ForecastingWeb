@@ -22,8 +22,7 @@ class TestHandler(QABaseHandler):
         by = 'D'
         databaseid = 'mydatabase'
         collectionid = 'uploaddata'
-        time.sleep(3)
-        #TS_Boosting_predict(start=start, end=end, by=by, databaseid=databaseid, collectionid=collectionid)
+        TS_Boosting_predict(start=start, end=end, by=by, databaseid=databaseid, collectionid=collectionid)
         print("token")
         test = {'token': 'success'}
         self.write(json.dumps(test))

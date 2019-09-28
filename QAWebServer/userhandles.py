@@ -38,6 +38,11 @@ from QAWebServer.basehandles import QABaseHandler
 
 
 class SignupHandler(QABaseHandler):
+    def set_default_headers(self):
+        print("setting headers!!!")
+        self.set_header("Access-Control-Allow-Origin","*")
+        self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With,  x-csrf-token")
+        self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
 
     def get(self):
         """注册接口
@@ -60,8 +65,18 @@ class SignupHandler(QABaseHandler):
         else:
             self.write('WRONG')
 
+    def options(self, *args, **kwargs):
+        self.set_status(204)
+        self.finish()
+
 
 class SigninHandler(QABaseHandler):
+    def set_default_headers(self):
+        print("setting headers!!!")
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With,  x-csrf-token")
+        self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
+
 
     def get(self):
         # ret_json = {}
@@ -79,15 +94,16 @@ class SigninHandler(QABaseHandler):
             'SUCCESS' if success
             'WRONG' if wrong
         """
+        # username = self.get_argument('username')
+        # password = self.get_argument('password')
+        data = tornado.escape.json_decode(self.request.body)
+        print(data)
+        username = data['username']
+        password = data['password']
+        res = QA_user_sign_in(username, password)
 
-        username = self.get_argument('account', default='admin')
-        password = self.get_argument('password', default='admin')
-        # res = QA_user_sign_in(username, password)
-        # if res is not None:
-        #     self.write('SUCCESS')
-        # else:
-        #     self.write('WRONG')
-        self.write({
+        if res:
+            self.write({
                 'login_status': 'success',
                 'username': username,
                 'picture': 'assets/images/admin.png',
@@ -96,15 +112,27 @@ class SigninHandler(QABaseHandler):
                 ],
                 'redirect': '/pages/emile',
                 'data': {
-                    'token': {
-                        'loggedIn': True,
-                    },
-                }
-        })
+                    'token': 'admin-token'
+                },
+                'code': 20000
+            })
+        else:
+             self.write({
+                 'code': 60204,
+                 'message': 'Account and password are incorrect.'
+             })
 
+    def options(self, *args, **kwargs):
+        self.set_status(204)
+        self.finish()
 
 
 class UserHandler(QABaseHandler):
+    def set_default_headers(self):
+        print("setting headers!!!")
+        self.set_header("Access-Control-Allow-Origin","*")
+        self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With,  x-csrf-token")
+        self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
     """这个handler是QAUser的部分实现
 
 
@@ -283,7 +311,9 @@ class UserHandler(QABaseHandler):
 
     def delete(self):
         pass
-
+    def options(self, *args, **kwargs):
+        self.set_status(204)
+        self.finish()
 
 class PersonBlockHandler(QABaseHandler):
 
