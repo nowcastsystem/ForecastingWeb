@@ -96,7 +96,7 @@ handlers = [
      StockPriceHandler),
     (r"/marketdata/stock/code",
      StockCodeHandler),
-    (r"/user/signin",
+    (r"/user/login",
      SigninHandler),
     (r"/user/signup",
      SignupHandler),
