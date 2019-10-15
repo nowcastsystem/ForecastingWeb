@@ -37,11 +37,6 @@ class TestHandler(QABaseHandler):
         }
 
 
-        collection_past = database.uploaddata
-        ref_past = collection_past.find()
-        past = pd.DataFrame(list(ref_past)).drop(columns = '_id')
-
-
 
         collection_past_predict = database.past_prediction
         ref_past_pred = collection_past_predict.find()
@@ -50,8 +45,8 @@ class TestHandler(QABaseHandler):
 
 
         past_json = {
-            'yAxisData': list(past['y'])[-14:],
-            'xAxisData': list(map(lambda x: x.split(' ')[0], list(past['datetime'])))[-14:],
+            'yAxisData': list(past_pred['y_t'])[-14:],
+            'xAxisData': list(map(lambda x: x.split(' ')[0], list(past_pred['datetime'])))[-14:],
             'label': 'Past',
             'colorPicked': '#999997',
             'twoLines': True,
