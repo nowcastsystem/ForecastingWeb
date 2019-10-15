@@ -40,12 +40,7 @@ class TestHandler(QABaseHandler):
         collection_past = database.uploaddata
         ref_past = collection_past.find()
         past = pd.DataFrame(list(ref_past)).drop(columns = '_id')
-        past_json = {
-            'yAxisData': list(past['y'])[-14:],
-            'xAxisData': list(map(lambda x: x.split(' ')[0], list(past['datetime'])))[-14:],
-            'label': 'Future',
-            'colorPicked': '#999997'
-        }
+
 
 
         collection_past_predict = database.past_prediction
@@ -53,17 +48,21 @@ class TestHandler(QABaseHandler):
         past_pred = pd.DataFrame(list(ref_past_pred)).drop(columns = '_id')
 
 
-        past_pred_json = {
-            'yAxisData': list(past_pred['predict'])[-14:],
-            'xAxisData': list(map(lambda x: x.split(' ')[0], list(past_pred['datetime'])))[-14:],
-            'label': 'Future',
-            'colorPicked': '#519e19'
-        }
 
+        past_json = {
+            'yAxisData': list(past['y'])[-14:],
+            'xAxisData': list(map(lambda x: x.split(' ')[0], list(past['datetime'])))[-14:],
+            'label': 'Past',
+            'colorPicked': '#999997',
+            'twoLines': True,
+            'yAxisData2': list(past_pred['predict'])[-14:],
+            'label2': 'Past Prediction',
+            'colorPicked2': '#999997',
+
+        }
         messagebody = {
             'token': 'success',
             'past': past_json,
-            'past_predict': past_pred_json,
             'future': prediction_json
         }
 
