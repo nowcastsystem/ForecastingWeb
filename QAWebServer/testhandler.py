@@ -23,9 +23,48 @@ class TestHandler(QABaseHandler):
         databaseid = 'mydatabase'
         collectionid = 'uploaddata'
         TS_Boosting_predict(start=start, end=end, by=by, databaseid=databaseid, collectionid=collectionid)
-        print("token")
-        test = {'token': 'success'}
-        self.write(json.dumps(test))
+
+
+        collection_prediction = database.prediction
+        ref_prediction = collection_prediction.find()
+        prediction = pd.DataFrame(list(ref_prediction)).drop(columns = '_id')
+
+        prediction_json = {
+            'yAxisData': list(prediction['predict']),
+            'xAxisData': list(map(lambda x : x.split(' ')[0],list(prediction['datetime']))),
+            'label': 'Future',
+            'colorPicked': '#519e19'
+        }
+
+
+
+        collection_past_predict = database.past_prediction
+        ref_past_pred = collection_past_predict.find()
+        past_pred = pd.DataFrame(list(ref_past_pred)).drop(columns = '_id')
+
+
+
+        past_json = {
+            'yAxisData': list(past_pred['y_t'])[-14:],
+            'xAxisData': list(map(lambda x: x.split(' ')[0], list(past_pred['datetime'])))[-14:],
+            'label': 'Past',
+            'colorPicked': '#999997',
+            'twoLines': True,
+            'yAxisData2': list(past_pred['predict'])[-14:],
+            'label2': 'Past Prediction',
+            'colorPicked2': '#999997',
+
+        }
+        messagebody = {
+            'token': 'success',
+            'past': past_json,
+            'future': prediction_json
+        }
+
+
+
+        self.write(messagebody)
+        #self.write(json.dumps(prediction_json))
 
     def options(self, *args, **kwargs):
         self.set_status(204)
