@@ -1,3 +1,23 @@
+# How to run the Timeseries UI backend
+use conda to create a new env with python >= 3.6 and activate
+
+pip install https://github.com/yutiansut/tornado_http2/archive/master.zip
+pip install tornado==5.1.1
+
+cd ForecastingQA
+python setup.py install --force
+
+cd ForecastingWeb
+python setup.py install --force
+
+pip install xgboost
+
+sudo mongod #before this step, make sure you have mongoDB installed
+
+quantaxis_webserver
+
+
+
 # QUANTAXIS_WEBSERVER
 quantaxis_webserver
 

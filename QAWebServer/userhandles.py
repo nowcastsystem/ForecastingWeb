@@ -57,7 +57,7 @@ class SignupHandler(QABaseHandler):
         """
 
         username = self.get_argument('user', default='admin')
-        password = self.get_argument('password', default='admin')
+        password = self.get_argument('password', default='adminadmin')
         if QA_user_sign_up(username, password, DATABASE):
             user = QA_User(username=username, password=password)
             user.save()

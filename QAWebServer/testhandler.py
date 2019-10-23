@@ -42,15 +42,13 @@ class TestHandler(QABaseHandler):
         ref_past_pred = collection_past_predict.find()
         past_pred = pd.DataFrame(list(ref_past_pred)).drop(columns = '_id')
 
-
-
         past_json = {
-            'yAxisData': list(past_pred['y_t'])[-14:],
-            'xAxisData': list(map(lambda x: x.split(' ')[0], list(past_pred['datetime'])))[-14:],
+            'yAxisData': list(past_pred['y_t']),
+            'xAxisData': list(map(lambda x: x.split(' ')[0], list(past_pred['datetime']))),
             'label': 'Past',
             'colorPicked': '#999997',
             'twoLines': True,
-            'yAxisData2': list(past_pred['predict'])[-14:],
+            'yAxisData2': list(past_pred['predict']),
             'label2': 'Past Prediction',
             'colorPicked2': '#999997',
 
@@ -60,8 +58,6 @@ class TestHandler(QABaseHandler):
             'past': past_json,
             'future': prediction_json
         }
-
-
 
         self.write(messagebody)
         #self.write(json.dumps(prediction_json))
