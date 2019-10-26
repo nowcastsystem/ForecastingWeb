@@ -47,7 +47,7 @@ class UploaderHandler(QABaseHandler):
     def put(self):
         body = self.request.body
         df = pd.read_csv(io.StringIO(body.decode('utf-8')))
-        rawdata = TSRawdata2(df)
+        rawdata = TSRawdata(df)
         outcome = rawdata.data
         outcome = TS_util_date2str(outcome)
         outcome = json.loads(outcome.to_json(orient='records'))
