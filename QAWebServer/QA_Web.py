@@ -28,6 +28,8 @@ import tornado
 import asyncio
 from tornado.web import Application, RequestHandler, authenticated
 from tornado.options import define, parse_command_line, parse_config_file, options
+
+
 from QAWebServer.arphandles import (AccountHandler, RiskHandler, PortfolioHandler)
 from QAWebServer.basehandles import QABaseHandler
 from QAWebServer.commandhandler import CommandHandler, RunnerHandler, CommandHandlerWS
@@ -51,6 +53,7 @@ from QAWebServer.userhandles import (
     PersonBlockHandler,
     SigninHandler,
     SignupHandler,
+    UserInfoHandler,
     UserHandler
 )
 
@@ -96,11 +99,13 @@ handlers = [
      StockPriceHandler),
     (r"/marketdata/stock/code",
      StockCodeHandler),
-    (r"/user/login",
+    (r"/dev-api/user/login",
      SigninHandler),
-    (r"/user/signup",
+    (r"/dev-api/user/info",
+     UserInfoHandler),
+    (r"/dev-api/user/signup",
      SignupHandler),
-    (r"/user",
+    (r"/dev-api/user",
      UserHandler),
     (r"/portfolio",
      PortfolioHandler),
@@ -136,11 +141,11 @@ handlers = [
      FileRunHandler),
     (r"/file",
     FileHandler),
-    (r"/predict",
+    (r"/dev-api/predict",
      PredictHandler),
-    (r"/uploader",
+    (r"/dev-api/uploader",
      UploaderHandler),
-    (r"/testpredict",
+    (r"/dev-api/testpredict",
      TestHandler)
 ]
 

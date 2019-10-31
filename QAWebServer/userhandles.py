@@ -126,6 +126,34 @@ class SigninHandler(QABaseHandler):
         self.set_status(204)
         self.finish()
 
+class UserInfoHandler(QABaseHandler):
+    def set_default_headers(self):
+        print("setting headers!!!")
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With,  x-csrf-token")
+        self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
+
+
+    def get(self):
+        # ret_json = {}
+        # with open('./rsa_keys/rsa_1024_pub.pem') as pub:
+        #     ret_json['public_key'] = pub.read()
+        ret_json = {
+            'code': 20000,
+            'data': {
+                'roles': ['admin'],
+                'introduction': 'I am a super administrator',
+                'avatar': 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+                'name': 'Super Admin'
+              }
+        }
+        self.write(ret_json)
+        # return ret_json
+
+    def options(self, *args, **kwargs):
+        self.set_status(204)
+        self.finish()
+
 
 class UserHandler(QABaseHandler):
     def set_default_headers(self):
@@ -350,6 +378,8 @@ if __name__ == '__main__':
              SigninHandler),
             (r"/user/signup",
              SignupHandler),
+            (r"/user/info",
+             UserInfoHandler),
             (r"/user",
              UserHandler)
         ],
