@@ -155,6 +155,26 @@ class UserInfoHandler(QABaseHandler):
         self.finish()
 
 
+class SignoutHandler(QABaseHandler):
+    def set_default_headers(self):
+        print("setting headers!!!")
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With,  x-csrf-token")
+        self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
+
+
+    def post(self):
+        ret_json = {
+            'code': 20000,
+            'data': 'success'
+        }
+        self.write(ret_json)
+
+    def options(self, *args, **kwargs):
+        self.set_status(204)
+        self.finish()
+
+
 class UserHandler(QABaseHandler):
     def set_default_headers(self):
         print("setting headers!!!")

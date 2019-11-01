@@ -52,6 +52,7 @@ from QAWebServer.tradehandles import AccModelHandler, TradeInfoHandler
 from QAWebServer.userhandles import (
     PersonBlockHandler,
     SigninHandler,
+    SignoutHandler,
     SignupHandler,
     UserInfoHandler,
     UserHandler
@@ -101,6 +102,8 @@ handlers = [
      StockCodeHandler),
     (r"/dev-api/user/login",
      SigninHandler),
+    (r"/dev-api/user/logout",
+     SignoutHandler),
     (r"/dev-api/user/info",
      UserInfoHandler),
     (r"/dev-api/user/signup",
