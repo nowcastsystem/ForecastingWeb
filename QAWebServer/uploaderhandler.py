@@ -10,9 +10,10 @@ from QUANTAXIS.QAUtil.QAParameter import RUNNING_STATUS
 from QUANTAXIS.QAUtil.QASetting import DATABASE
 
 from QUANTAXIS.QAUtil import QASETTING
-from QUANTAXIS.TSData.TSRawdata import TSRawdata
-# from QUANTAXIS.TSData.TSRawdata2 import TSRawdata2
+# from QUANTAXIS.TSData.TSRawdata import TSRawdata
+from QUANTAXIS.TSData.TSRawdata2 import TSRawdata2
 from QUANTAXIS.TSUtil.TSDate import TS_util_date2str
+
 
 class UploaderHandler(QABaseHandler):
     def set_default_headers(self):
@@ -24,7 +25,7 @@ class UploaderHandler(QABaseHandler):
     def post(self):
         body = self.request.body
         df = pd.read_csv(io.StringIO(body.decode('utf-8')))
-        rawdata = TSRawdata(df)
+        rawdata = TSRawdata2(df)
         outcome = rawdata.data
         outcome = TS_util_date2str(outcome)
         outcome = json.loads(outcome.to_json(orient='records'))
@@ -47,7 +48,7 @@ class UploaderHandler(QABaseHandler):
     def put(self):
         body = self.request.body
         df = pd.read_csv(io.StringIO(body.decode('utf-8')))
-        rawdata = TSRawdata(df)
+        rawdata = TSRawdata2(df)
         outcome = rawdata.data
         outcome = TS_util_date2str(outcome)
         outcome = json.loads(outcome.to_json(orient='records'))
