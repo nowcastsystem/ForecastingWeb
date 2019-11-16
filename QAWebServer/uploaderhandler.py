@@ -14,6 +14,10 @@ from QUANTAXIS.QAUtil import QASETTING
 from QUANTAXIS.TSData.TSRawdata2 import TSRawdata2
 from QUANTAXIS.TSUtil.TSDate import TS_util_date2str
 
+# edited by jingya
+import urllib.parse
+####
+
 
 class UploaderHandler(QABaseHandler):
     def set_default_headers(self):
@@ -23,6 +27,10 @@ class UploaderHandler(QABaseHandler):
         self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
 
     def post(self):
+        # edited by jingya
+        #uri_json = urllib.parse.parse_qs(self.request.uri)
+        #username = uri_json['username']
+        ####
         body = self.request.body
         df = pd.read_csv(io.StringIO(body.decode('utf-8')))
         rawdata = TSRawdata2(df)
@@ -31,7 +39,11 @@ class UploaderHandler(QABaseHandler):
         outcome = json.loads(outcome.to_json(orient='records'))
         # print(df)
         myclient = QASETTING.client
+        # edited by jingya
+        #database = myclient.username
+        ####
         database = myclient.mydatabase
+        
         col = database.uploaddata
         col.drop()
         col.insert_many(outcome)
@@ -42,10 +54,19 @@ class UploaderHandler(QABaseHandler):
         #     io.StringIO(decoded.decode('utf-8')))
         # print(df)
 
+
         self.write('123')
 
 
     def put(self):
+        # edited by jingya
+        uri_json = urllib.parse.parse_qs(self.request.uri)
+        username = uri_json['username'][0]
+        # print("in uploader handler...")
+        # print(username)
+        # print(type(username))
+        ####
+
         body = self.request.body
         df = pd.read_csv(io.StringIO(body.decode('utf-8')))
         rawdata = TSRawdata2(df)
@@ -55,7 +76,12 @@ class UploaderHandler(QABaseHandler):
         # print(df)
         myclient = QASETTING.client
         database = myclient.mydatabase
-        col = database.uploaddata
+        
+        # edited by jingya
+        col = database[username]
+        ####
+
+        #col = database.uploaddata
         col.drop()
         col.insert_many(outcome)
         # out.write(bytes(body))
