@@ -9,7 +9,11 @@ class PredictHandler(QABaseHandler):
         start = self.get_argument('start')
         end = self.get_argument('end')
         by = 'D'
-        databaseid = 'mydatabase'
+        # edited by jingya
+        username = self.request.username
+        databaseid = username
+        ####
+        #databaseid = 'mydatabase'
         collectionid = 'rawdatatest'
         TS_Boosting_predict(start=start,end=end,by=by,databaseid=databaseid,collectionid=collectionid)
         client = QASETTING.client

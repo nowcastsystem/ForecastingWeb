@@ -7,6 +7,10 @@ from QUANTAXIS.QAUtil.QATransform import QA_util_to_json_from_pandas
 import json
 import time
 
+# edited by jingya
+import urllib.parse
+####
+
 class DownloadPredictHandler(QABaseHandler):
     def set_default_headers(self):
         print("setting headers!!! analyze")
@@ -37,16 +41,35 @@ class TestHandler(QABaseHandler):
         self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
     def get(self):
         client = QASETTING.client
+        
+        # edited by jingya
+        uri_json = urllib.parse.urlparse(self.request.uri)
+        query_json = urllib.parse.parse_qs(uri_json.query)
+        username = query_json['username'][0]
+        # print("in test handler...")
+        # print(username)
+        # print(type(username))
+        ####
+        
         database = client.mydatabase
-        collection = database.uploaddata
+        
+        # edited by jingya
+        collection = database[username]
+        ####
+        
+        #collection = database.uploaddata
         ref = collection.find()
         start = ref[0]['datetime']
         end = ref[ref.count()-1]['datetime']
         by = 'D'
-        databaseid = 'mydatabase'
-        collectionid = 'uploaddata'
-        TS_Boosting_predict(start=start, end=end, by=by, databaseid=databaseid, collectionid=collectionid)
 
+        # edited by jingya
+        collectionid = username
+        ####
+        
+        databaseid = 'mydatabase'
+        #collectionid = 'uploaddata'
+        TS_Boosting_predict(start=start, end=end, by=by, databaseid=databaseid, collectionid=collectionid)
 
         collection_prediction = database.prediction
         ref_prediction = collection_prediction.find()

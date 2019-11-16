@@ -7,7 +7,7 @@ pip install tornado==5.1.1
 cd ForecastingQA
 python setup.py install --force
 
-cd ForecastingWeb
+cd TimeseriesForcastingBackend
 python setup.py install --force
 
 pip install xgboost
