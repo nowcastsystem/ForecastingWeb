@@ -55,7 +55,7 @@ class SignupHandler(QABaseHandler):
             'SUCCESS' if success
             'WRONG' if wrong
         """
-
+        print("signing up")
         username = self.get_argument('user', default='admin')
         password = self.get_argument('password', default='adminadmin')
         if QA_user_sign_up(username, password, DATABASE):
@@ -63,12 +63,43 @@ class SignupHandler(QABaseHandler):
             user.save()
             self.write('SUCCESS')
         else:
-            self.write('WRONG')
+            self.write('FAILED')
 
     def options(self, *args, **kwargs):
         self.set_status(204)
         self.finish()
 
+class UserRemoveHandler(QABaseHandler):
+    def set_default_headers(self):
+        print("setting headers!!!")
+        self.set_header("Access-Control-Allow-Origin","*")
+        self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With,  x-csrf-token")
+        self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
+
+    def get(self):
+        """删除用户接口
+
+        Arguments:
+            QABaseHandler {[type]} -- [description]
+
+            user/signin?user=xxx&password=xx
+        Return 
+            'SUCCESS' if success
+            'WRONG' if wrong
+        """
+
+        username = self.get_argument('user', default='admin')
+        password = self.get_argument('password', default='adminadmin')
+        if not QA_user_sign_up(username, password, DATABASE):
+            user = QA_User(username=username, password=password)
+            user.remove()
+            self.write('SUCCESS')
+        else:
+            self.write('WRONG. USER DOES NOT EXIST')
+
+    def options(self, *args, **kwargs):
+        self.set_status(204)
+        self.finish()
 
 class SigninHandler(QABaseHandler):
     def set_default_headers(self):
