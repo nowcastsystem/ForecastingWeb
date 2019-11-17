@@ -54,6 +54,7 @@ from QAWebServer.userhandles import (
     SigninHandler,
     SignoutHandler,
     SignupHandler,
+    UserRemoveHandler,
     UserInfoHandler,
     UserHandler
 )
@@ -67,7 +68,8 @@ from QAWebServer.predicthandler import PredictHandler
 from QAWebServer.uploaderhandler import UploaderHandler
 from QAWebServer.testhandler import (
     TestHandler,
-    DownloadPredictHandler
+    DownloadPredictHandler,
+    DownloadSampleHandler
 )
 
 class INDEX(QABaseHandler):
@@ -111,6 +113,8 @@ handlers = [
      UserInfoHandler),
     (r"/dev-api/user/signup",
      SignupHandler),
+    (r"/dev-api/user/remove",
+     UserRemoveHandler),
     (r"/dev-api/user",
      UserHandler),
     (r"/portfolio",
@@ -154,7 +158,9 @@ handlers = [
     (r"/dev-api/testpredict",
      TestHandler),
     (r"/dev-api/downloadPrediction",
-     DownloadPredictHandler)
+     DownloadPredictHandler),
+    (r"/dev-api/DownloadSampleHandler",
+    DownloadSampleHandler)
 ]
 
 

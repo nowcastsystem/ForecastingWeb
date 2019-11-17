@@ -32,6 +32,30 @@ class DownloadPredictHandler(QABaseHandler):
                 self.write(str(row[0])+","+str(row[1])+"\r\n")
         # self.write(open(export_csv, encoding="utf8"))
 
+class DownloadSampleHandler(QABaseHandler):
+    def set_default_headers(self):
+        print("setting headers!!! analyze")
+        self.set_header("Access-Control-Allow-Origin","*")
+        self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With, x-token")
+        self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
+    def get(self):
+        client = QASETTING.client
+        # database = client.mydatabase
+        # prediction = database.prediction
+        # ref_prediction = prediction.find()
+        # predictionDF = pd.DataFrame(list(ref_prediction)).drop(columns = '_id')
+        # export_csv = predictionDF.to_csv(r'prediction.csv', index=None, header=True)
+        self.set_header('Content-Type', 'text/csv')
+        self.set_header('Content-Disposition', 'attachment; filename=PredicT_Sample_Data.csv')
+        with open('/home/ForecastingWeb/testData/daily-total-female-births.csv', encoding="utf8") as f:
+            csv_reader = csv.reader(f, delimiter=',')
+            for row in csv_reader:
+                self.write(str(row[0])+","+str(row[1])+"\r\n")
+        # with open('prediction.csv', encoding="utf8") as f:
+        #     csv_reader = csv.reader(f, delimiter=',')
+        #     for row in csv_reader:
+        #         self.write(str(row[0])+","+str(row[1])+"\r\n")
+        
 
 class TestHandler(QABaseHandler):
     def set_default_headers(self):
