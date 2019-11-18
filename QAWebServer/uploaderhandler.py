@@ -26,50 +26,22 @@ class UploaderHandler(QABaseHandler):
         self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With,  x-csrf-token")
         self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
 
-    def post(self):
-        # edited by jingya
-        #uri_json = urllib.parse.parse_qs(self.request.uri)
-        #username = uri_json['username']
-        ####
-        body = self.request.body
-        df = pd.read_csv(io.StringIO(body.decode('utf-8')))
-        rawdata = TSRawdata2(df)
-        outcome = rawdata.data
-        outcome = TS_util_date2str(outcome)
-        outcome = json.loads(outcome.to_json(orient='records'))
-        # print(df)
-        myclient = QASETTING.client
-        # edited by jingya
-        #database = myclient.username
-        ####
-        database = myclient.mydatabase
-        
-        col = database.uploaddata
-        col.drop()
-        col.insert_many(outcome)
-        # out.write(bytes(body))
-        # print(pd.read_csv(bytes(body)))
-        # decoded = base64.b64decode(body)
-        # df = pd.read_csv(
-        #     io.StringIO(decoded.decode('utf-8')))
-        # print(df)
-
-
-        self.write('123')
-
-
     def put(self):
         # edited by jingya
         uri_json = urllib.parse.parse_qs(self.request.uri)
         username = uri_json['username'][0]
-        # print("in uploader handler...")
+        print("in uploader handler...")
+        print(self.request.uri)
+        print(username)
         # print(username)
         # print(type(username))
         ####
 
         body = self.request.body
         df = pd.read_csv(io.StringIO(body.decode('utf-8')))
+        print("here")
         rawdata = TSRawdata2(df)
+        print("raw data already processed")
         outcome = rawdata.data
         outcome = TS_util_date2str(outcome)
         outcome = json.loads(outcome.to_json(orient='records'))

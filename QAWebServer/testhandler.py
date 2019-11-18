@@ -47,7 +47,9 @@ class DownloadSampleHandler(QABaseHandler):
         # export_csv = predictionDF.to_csv(r'prediction.csv', index=None, header=True)
         self.set_header('Content-Type', 'text/csv')
         self.set_header('Content-Disposition', 'attachment; filename=PredicT_Sample_Data.csv')
+        print("Download sample data")
         with open('/home/ForecastingWeb/testData/daily-total-female-births.csv', encoding="utf8") as f:
+        #with open('../testData/daily-total-female-births.csv', encoding="utf8") as f:
             csv_reader = csv.reader(f, delimiter=',')
             for row in csv_reader:
                 self.write(str(row[0])+","+str(row[1])+"\r\n")
@@ -63,6 +65,7 @@ class TestHandler(QABaseHandler):
         self.set_header("Access-Control-Allow-Origin","*")
         self.set_header("Access-Control-Allow-Headers","Content-Type, Authorization, Content-Length, X-Requested-With, x-token")
         self.set_header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE")
+    
     def get(self):
         client = QASETTING.client
         
@@ -70,8 +73,8 @@ class TestHandler(QABaseHandler):
         uri_json = urllib.parse.urlparse(self.request.uri)
         query_json = urllib.parse.parse_qs(uri_json.query)
         username = query_json['username'][0]
-        # print("in test handler...")
-        # print(username)
+        print("in test handler...")
+        print(username)
         # print(type(username))
         ####
         
