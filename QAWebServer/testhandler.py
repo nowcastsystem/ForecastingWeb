@@ -48,8 +48,8 @@ class DownloadSampleHandler(QABaseHandler):
         self.set_header('Content-Type', 'text/csv')
         self.set_header('Content-Disposition', 'attachment; filename=PredicT_Sample_Data.csv')
         print("Download sample data")
-        #with open('/home/ForecastingWeb/testData/daily-total-female-births.csv', encoding="utf8") as f:
-        with open('../testData/daily-total-female-births.csv', encoding="utf8") as f:
+        with open('/home/ForecastingWeb/testData/daily-total-female-births.csv', encoding="utf8") as f:
+        #with open('../testData/daily-total-female-births.csv', encoding="utf8") as f:
             csv_reader = csv.reader(f, delimiter=',')
             for row in csv_reader:
                 self.write(str(row[0])+","+str(row[1])+"\r\n")
