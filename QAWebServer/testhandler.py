@@ -88,6 +88,8 @@ class TestHandler(QABaseHandler):
         ref = collection.find()
         start = ref[0]['datetime']
         end = ref[ref.count()-1]['datetime']
+        print("start " + str(start) + "  end " + str(end))
+        print(collection)
         by = 'D'
 
         # edited by jingya
