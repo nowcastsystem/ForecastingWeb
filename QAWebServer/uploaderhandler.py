@@ -39,7 +39,6 @@ class UploaderHandler(QABaseHandler):
 
         body = self.request.body
         df = pd.read_csv(io.StringIO(body.decode('utf-8')))
-        print("here")
         rawdata = TSRawdata2(df)
         print("raw data already processed")
         outcome = rawdata.data
