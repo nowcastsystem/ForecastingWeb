@@ -88,12 +88,11 @@ class TestHandler(QABaseHandler):
         ref = collection.find()
         start = ref[0]['datetime']
         end = ref[ref.count()-1]['datetime']
-        print("start " + str(start) + "  end " + str(end))
-        print(collection)
         by = 'D'
 
         # edited by jingya
         collectionid = username
+        pastdata = pd.DataFrame(list(ref)).drop(columns = '_id')
         ####
         
         databaseid = 'mydatabase'
@@ -103,7 +102,7 @@ class TestHandler(QABaseHandler):
         collection_prediction = database.prediction
         ref_prediction = collection_prediction.find()
         prediction = pd.DataFrame(list(ref_prediction)).drop(columns = '_id')
-
+        
         prediction_json = {
             'yAxisData': list(prediction['predict']),
             'xAxisData': list(map(lambda x : x.split(' ')[0],list(prediction['datetime']))),
@@ -112,18 +111,51 @@ class TestHandler(QABaseHandler):
         }
 
 
-
         collection_past_predict = database.past_prediction
         ref_past_pred = collection_past_predict.find()
         past_pred = pd.DataFrame(list(ref_past_pred)).drop(columns = '_id')
+        
+        print("past data x-axis:")
+        print(list(map(lambda x: x.split(' ')[0], list(pastdata['datetime']))))
 
+        # adjust alignment bw historical data and predicted data
+        past_x_lst = list(map(lambda x: x.split(' ')[0], list(pastdata['datetime'])))
+        past_pred_x_lst = list(map(lambda x: x.split(' ')[0], list(past_pred['datetime'])))
+        past_y_lst = list(pastdata['y'])
+        past_pred_y_lst = list(past_pred['predict'])
+        pred_x_head = past_pred_x_lst[0]
+        for i in past_x_lst:
+            if i == pred_x_head:
+                break
+            else:
+                past_pred_y_lst.insert(0, None)
+        padding = len(past_y_lst) - len(past_pred_y_lst)
+        for i in range(0, padding):
+            past_pred_y_lst.append(None)
+
+        print(past_y_lst)
+        print(len(past_y_lst))
+        print(past_pred_y_lst)
+        print(len(past_pred_y_lst))
+        
+        # past_json = {
+        #     'yAxisData': list(past_pred['y_t']),
+        #     'xAxisData': list(map(lambda x: x.split(' ')[0], list(past_pred['datetime']))),
+        #     'label': 'Past',
+        #     'colorPicked': '#999997',
+        #     'twoLines': True,
+        #     'yAxisData2': list(past_pred['predict']),
+        #     'label2': 'Past Prediction',
+        #     'colorPicked2': '#999997',
+
+        # }
         past_json = {
-            'yAxisData': list(past_pred['y_t']),
-            'xAxisData': list(map(lambda x: x.split(' ')[0], list(past_pred['datetime']))),
+            'xAxisData': past_x_lst,
+            'yAxisData': past_y_lst,
             'label': 'Past',
             'colorPicked': '#999997',
             'twoLines': True,
-            'yAxisData2': list(past_pred['predict']),
+            'yAxisData2': past_pred_y_lst,
             'label2': 'Past Prediction',
             'colorPicked2': '#999997',
 
